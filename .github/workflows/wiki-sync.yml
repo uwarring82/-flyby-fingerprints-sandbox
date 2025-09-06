@@ -1,0 +1,62 @@
+name: Sync docs/wiki to GitHub Wiki
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/wiki/**'
+      - '.github/workflows/wiki-sync.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki-sync
+  cancel-in-progress: true
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync docs/wiki to GitHub Wiki
+        env:
+          TOKEN: ${{ secrets.WIKI_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REPO="${GITHUB_REPOSITORY}"
+          WIKI_URL="https://x-access-token:${TOKEN}@github.com/${REPO}.wiki.git"
+          echo "Cloning wiki: ${WIKI_URL}"
+          rm -rf /tmp/wiki
+          if ! git clone --depth=1 "${WIKI_URL}" /tmp/wiki; then
+            echo "Wiki not initialized; creating repository"
+            mkdir /tmp/wiki
+            git init /tmp/wiki
+            cd /tmp/wiki
+            touch Home.md
+            git add Home.md
+            git commit -m "docs: bootstrap wiki"
+            git branch -M master
+            git remote add origin "${WIKI_URL}"
+            git push -u origin master
+          fi
+          if [ ! -d docs/wiki ]; then
+            echo "docs/wiki not found; nothing to sync."
+            exit 0
+          fi
+          rsync -av --delete --exclude='.git' docs/wiki/ /tmp/wiki/
+          cd /tmp/wiki
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            DEFAULT_BRANCH=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
+            git commit -m "docs(wiki): sync from main repo docs/wiki on ${GITHUB_SHA}"
+            git push origin HEAD:${DEFAULT_BRANCH}
+          else
+            echo "No changes to sync."
+          fi
