@@ -1,0 +1,5 @@
+trap_id,run_id,mode,frequency_hz,heating_rate_quanta_per_s,heating_rate_err
+SandboxTrap,sim_clean_run_1,axial,200000.0,3000,400
+SandboxTrap,sim_clean_run_1,radial1,500000.0,800,100
+SandboxTrap,sim_clean_run_1,radial2,800000.0,400,80
+SandboxTrap,sim_clean_run_1,axial,1200000.0,250,50
