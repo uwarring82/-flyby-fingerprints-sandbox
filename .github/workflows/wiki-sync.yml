@@ -44,19 +44,24 @@ jobs:
             git remote add origin "${WIKI_URL}"
             git push -u origin master
           fi
+
           if [ ! -d docs/wiki ]; then
             echo "docs/wiki not found; nothing to sync."
             exit 0
           fi
+
           rsync -av --delete --exclude='.git' docs/wiki/ /tmp/wiki/
           cd /tmp/wiki
+
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A
+
             DEFAULT_BRANCH=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
             git commit -m "docs(wiki): sync from main repo docs/wiki on ${GITHUB_SHA}"
             git push origin HEAD:${DEFAULT_BRANCH}
+
           else
             echo "No changes to sync."
           fi
