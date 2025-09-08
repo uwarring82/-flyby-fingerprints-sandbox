@@ -1,0 +1,11 @@
+{
+  "n_runs": 1,
+  "n_flags": 1,
+  "by_trap": {
+    "SandboxTrap": {
+      "b_A": 0,
+      "b_D": 0,
+      "b_M": 1
+    }
+  }
+}

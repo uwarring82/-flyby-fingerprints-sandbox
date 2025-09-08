@@ -1,0 +1,2 @@
+trap_id,run_id,A_stat,A_p,b_A,D_stat,D_p,b_D,M_stat,M_p,b_M
+SandboxTrap,sim_clean_run_1,0.0,1.0,0,2.630529796722366,0.6214245405597253,0,311.05900487075434,7.123216543742961e-61,1
