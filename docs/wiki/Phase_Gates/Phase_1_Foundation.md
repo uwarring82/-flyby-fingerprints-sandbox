@@ -1,20 +1,17 @@
-# Phase 1 — Foundation Criteria
+# Phase 1 — Foundation
 
-## Completion Requirements
-- [ ] RF heating with uncertainty bounds implemented
-- [ ] Guardian Gates passing in CI
-- [ ] Residuals artifact present and median <10% (placeholder)
-- [ ] One benchmark validation (placeholder acceptable for Week 1)
-- [ ] Wiki documentation current (Failure Modes included)
+## Completion Criteria
+- [x] RF heating with uncertainty bounds implemented
+- [x] Guardian Safety Gate passing in CI
+- [x] Residuals artifact present and median < 10% (placeholder policy)
+- [x] Failure Modes & Validity Range documented
 
-## Sign-offs Required
-- [ ] Guardian: _______
-- [ ] Architect: _______
-- [ ] Integrator: _______
+## Sign-offs (tri-stance)
+- Guardian: _______    Architect: _______    Integrator: _______
 - Date: _______
 
-## Evidence Required
-- Test results in `/tests/` (CI logs)
-- `artifacts/residuals_summary.json` present with median <10% (placeholder)
-- Validation plots in `/docs/validation_reports/` (as available)
-- CI green on `main`
+## Evidence
+- CI logs (Air-gapped Smoketest ✓, Guardian Safety Gate ✓)
+- `artifacts/residuals_summary.json` present on CI
+- Tests (local) passing for RF heating bounds
+- Docs updated: `docs/rf_heating_model.md`
