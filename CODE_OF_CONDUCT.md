@@ -2,8 +2,8 @@
 # Code of Conduct
 
 ## Purpose
-This project is part of publicly funded scientific research.  
-We aim to build a community that values **honesty, openness, reproducibility, and collaboration**.  
+This project is part of publicly funded scientific research.
+We aim to build a community that values **honesty, openness, reproducibility, and collaboration**.
 Our shared goal is to generate sustainable insights into the physics of trapped ions and weak collisions by working together transparently.
 
 ## Our Standards
@@ -26,15 +26,15 @@ Our shared goal is to generate sustainable insights into the physics of trapped 
 This Code of Conduct applies to all interactions in this repository, including issues, pull requests, discussions, and related communication channels.
 
 ## Enforcement
-Maintainers (starting with **Ulrich Warring, University of Freiburg**) are responsible for clarifying and enforcing this Code of Conduct.  
-Violations may result in warnings or removal from the project community, depending on severity.  
+Maintainers (starting with **Ulrich Warring, University of Freiburg**) are responsible for clarifying and enforcing this Code of Conduct.
+Violations may result in warnings or removal from the project community, depending on severity.
 Concerns can be raised confidentially via direct contact with the maintainer.
 
 ## Scientific Responsibility
-Because this is publicly funded research, we carry a **special responsibility**:  
-- to pursue knowledge honestly,  
-- to make results reproducible and verifiable,  
-- and to share methods and findings as openly as possible for the benefit of the broader community.  
+Because this is publicly funded research, we carry a **special responsibility**:
+- to pursue knowledge honestly,
+- to make results reproducible and verifiable,
+- and to share methods and findings as openly as possible for the benefit of the broader community.
 
 By contributing, you agree to uphold these principles of **open, honest, and sustainable science**.
 
