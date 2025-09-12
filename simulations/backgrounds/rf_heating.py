@@ -33,7 +33,7 @@ class RFHeatingUncertainty:
 
     S_E0_relative: float = 0.30      # ±30% on noise floor
     alpha_absolute: float = 0.20     # ±0.2 on spectral slope
-    model_validity_range_hz: tuple = (1e5, 1e7)
+    validity_range_hz: tuple = (1e5, 1e7)  # frequency range where the model is valid
 
 
 def heating_rate_with_bounds(params: RFHeatingParams, T: float) -> tuple[float, float, float]:
