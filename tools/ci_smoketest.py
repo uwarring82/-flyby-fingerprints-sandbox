@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import json
-import pathlib
+from pathlib import Path
 import sys
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import numpy as np
