@@ -46,6 +46,8 @@ git checkout -b feature/your-feature-name
 ### 4. Make your changes
 - Add or modify analysis scripts, data schemas, or documentation.
 - Ensure that existing functionality still works.
+- Run `python tools/format_gate.py` to check formatting and linting.
+- Run `pytest` to execute the test suite.
 
 ### 5. Commit and push
 ```bash

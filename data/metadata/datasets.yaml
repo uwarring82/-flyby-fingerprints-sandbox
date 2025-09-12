@@ -1,0 +1,24 @@
+interactions:
+  - background: rf_heating
+    target: flyby_signature
+    effects: ["doppler_masking", "energy_blur", "rate_change"]
+    risk: H
+    requires_cross_validation: true
+  - background: patch_potentials
+    target: flyby_signature
+    effects: ["trajectory_mod", "signal_shift", "position_error"]
+    risk: H
+    requires_cross_validation: true
+  - background: outgassing
+    target: detection
+    effects: ["species_confusion", "false_positives"]
+    risk: H
+    requires_cross_validation: true
+  - background: micromotion
+    target: detection
+    effects: ["time_resolution", "broadening"]
+    risk: M
+  - background: dark_counts
+    target: detection
+    effects: ["false_triggers", "sn_degradation"]
+    risk: M

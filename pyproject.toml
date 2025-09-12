@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flyby"
+version = "0.1.0"
+description = "Simulation-first framework for flyby fingerprints"
+authors = [{name = "Flyby Team"}]
+dependencies = []
+
+[tool.black]
+line-length = 88
+
