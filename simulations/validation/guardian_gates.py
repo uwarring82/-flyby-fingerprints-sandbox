@@ -1,7 +1,6 @@
 from __future__ import annotations
 import sys, json, pathlib, ast
 from dataclasses import dataclass
-from typing import List
 
 ART = pathlib.Path("artifacts")
 ART.mkdir(exist_ok=True, parents=True)
@@ -12,11 +11,6 @@ class GateResult:
     name: str
     passed: bool
     details: str = ""
-
-
-def _py_files(root: str) -> List[pathlib.Path]:
-    return [p for p in pathlib.Path(root).rglob("*.py") if p.is_file()]
-
 
 def check_uncertainty_documented() -> GateResult:
     """Require an *Uncertainty class in each backgrounds module (except __init__.py)."""
