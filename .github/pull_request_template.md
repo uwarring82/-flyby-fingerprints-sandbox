@@ -1,5 +1,5 @@
 ## Summary
-- 
+-
 
 ## Testing
 - [ ] `python tools/format_gate.py`

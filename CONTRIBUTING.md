@@ -1,13 +1,13 @@
 
 # Contributing to flyby-fingerprints-sandbox
 
-Thank you for considering contributing to this project!  
+Thank you for considering contributing to this project!
 This repository is a sandbox environment for analyzing heating-rate datasets of trapped ions to identify fingerprints of fly-by (residual-gas) collisions.
 
 ---
 
 ## Maintainer
-Ulrich Warring  
+Ulrich Warring
 University of Freiburg
 
 ---
@@ -63,8 +63,8 @@ git push origin feature/your-feature-name
 ---
 
 ## Code of Conduct
-- Be respectful, collaborative, and transparent.  
-- All contributions must be released under the GPLv3 license.  
+- Be respectful, collaborative, and transparent.
+- All contributions must be released under the GPLv3 license.
 - Provide clear documentation for any new analysis or data formats.
 
 ---

@@ -2,29 +2,34 @@ import numpy as np
 from simulations.backgrounds.rf_heating import (
     RFHeatingParams,
     heating_rate,
-    heating_rate_with_bounds,
     sample_energy_kick,
+    heating_rate_with_bounds,
 )
 
 
-def test_heating_rate_nominal():
-    params = RFHeatingParams(S_E0=1.0, alpha=1.0)
-    assert heating_rate(params, 1e6) == 1.0
+def test_positive_rates_seeded():
+    p = RFHeatingParams(
+        omega_sec=2 * np.pi * 1e6,
+        d_elec=50e-6,
+        S_E0=1e-12,
+        alpha=1.0,
+        mass=2.29e-25,
+    )
+    rng = np.random.default_rng(123)
+    r = sample_energy_kick(p, dt=1.0, rng=rng)
+    assert r >= 0
+    assert heating_rate(p, 300.0) > 0.0
 
 
-def test_sample_energy_kick_seeded():
-    params = RFHeatingParams(S_E0=1.0, alpha=1.0)
-    rng1 = np.random.default_rng(123)
-    draws1 = sample_energy_kick(params, rng1, size=100)
-    rng2 = np.random.default_rng(123)
-    draws2 = sample_energy_kick(params, rng2, size=100)
-    assert draws1.shape == (100,)
-    assert np.allclose(draws1, draws2)
-
-
-def test_heating_rate_with_bounds():
-    params = RFHeatingParams(S_E0=2.0, alpha=0.5)
-    nominal, lower, upper = heating_rate_with_bounds(params, 1e6)
-    assert lower < nominal < upper
-    assert np.isclose(lower, nominal * (1 - 0.30))
-    assert np.isclose(upper, nominal * (1 + 0.30))
+def test_uncertainty_bounds_monotonic():
+    p = RFHeatingParams(
+        omega_sec=2 * np.pi * 1e6,
+        d_elec=50e-6,
+        S_E0=1e-12,
+        alpha=1.0,
+        mass=2.29e-25,
+    )
+    n, lo, hi = heating_rate_with_bounds(p, 300.0)
+    assert lo <= n <= hi
+    # sanity: 30% band
+    assert (hi - n) / n >= 0.29

@@ -18,22 +18,10 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install -e .
           pip install black ruff
-      - name: Format gate
+      - name: Air-gapped Formatting Gate
         run: python tools/format_gate.py
       - name: Run tests
         run: pytest -q
-      - name: Guardian Uncertainty Check
-        run: |
-          python - <<'PY'
-          import ast, pathlib, sys
-          missing = []
-          for p in pathlib.Path('simulations').rglob('*.py'):
-              tree = ast.parse(p.read_text())
-              classes = [n.name for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
-              # Require *some* Uncertainty class in background modules
-              if 'backgrounds' in str(p.parent) and not any('Uncertainty' in c for c in classes):
-                  missing.append(str(p))
-          if missing:
-              raise SystemExit(f"Missing Uncertainty classes in: {missing}")
-          print("Uncertainty classes present in background modules.")
-          PY
+      - name: Guardian Safety Gate
+        run: python -m simulations.validation.guardian_gates
+        if: always()
