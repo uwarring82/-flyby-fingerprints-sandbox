@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, Any
 
 SCHEMA_PATH = Path("data/metadata/physical_constraints.json")
+SAFE_GLOBALS_BASE = {"__builtins__": {}, "abs": abs, "min": min, "max": max}
 
 
 def apply_physical_constraints(params: Dict[str, Any]) -> Dict[str, Any]:
@@ -30,9 +31,11 @@ def apply_physical_constraints(params: Dict[str, Any]) -> Dict[str, Any]:
             continue
         # Evaluate in a restricted namespace; expose current params via locals()
         ns = dict(constrained)
+        safe_globals = dict(SAFE_GLOBALS_BASE)
+        safe_globals["locals"] = lambda ns=ns: ns
         try:
-            if eval(cond, {"__builtins__": {}}, ns):
-                constrained[out] = eval(expr, {"__builtins__": {}}, ns)
+            if eval(cond, safe_globals, ns):
+                constrained[out] = eval(expr, safe_globals, ns)
         except Exception:
             # Silent no-op on bad rule; document issues via repo docs if needed
             pass
