@@ -1,17 +1,17 @@
 {
   "nist2016_heating": {
     "pass": true,
-    "dev": 0.08,
-    "sigma": 0.0
+    "dev": 0.05732871437587983,
+    "sigma": 0.15
   },
   "innsbruck2018_rates": {
     "pass": true,
-    "dev": 0.12,
-    "sigma": 0.08
+    "dev": 0.038792077840109324,
+    "sigma": 0.1
   },
   "umd2019_micromotion": {
     "pass": true,
-    "dev": 0.09,
-    "sigma": 0.0
+    "dev": 0.17480968263986646,
+    "sigma": 0.1
   }
 }
