@@ -1,0 +1,14 @@
+{
+  "relations": [
+    {
+      "out": "pressure",
+      "expr": "pressure*(temperature/300.0)",
+      "when": "'pressure' in locals() and 'temperature' in locals()"
+    },
+    {
+      "out": "rf_power",
+      "expr": "rf_power",
+      "when": "'rf_power' in locals()"
+    }
+  ]
+}
