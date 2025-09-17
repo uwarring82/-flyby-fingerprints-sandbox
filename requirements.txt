@@ -1,6 +1,5 @@
-
-numpy
-scipy
-pandas
-matplotlib
-jupyter
+numpy>=1.24,<2.0
+pandas>=2.0,<3.0
+scipy>=1.10,<2.0
+pydantic>=2.6,<3.0
+pytest>=7.4,<9.0

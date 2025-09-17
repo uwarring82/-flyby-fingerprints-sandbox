@@ -53,6 +53,17 @@ Outputs:
 - `out/triad_summary.csv`: per-run statistics and triad decisions.
 - `out/triad_report.json`: summary of flagged runs.
 
+### 30-second toy run
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -e . -r requirements.txt
+
+# run toy dataset
+python -m flyby.triad --data-root data/toy --out out
+# outputs: out/triad_summary.csv, out/triad_report.json and prints decision
+```
+
 ---
 
 ## Roadmap
