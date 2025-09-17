@@ -18,26 +18,14 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install -U pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f pyproject.toml ]; then pip install -e .; fi
-      - name: Run toy pipeline (best-effort)
+          pip install -e . -r requirements.txt
+      - name: Run toy pipeline
         run: |
-          set -e
-          if python -c "import importlib; import sys; sys.exit(0 if importlib.util.find_spec('flyby') else 1)"; then
-            if [ -f data/toy/heating.csv ]; then
-              python -m flyby.triad --data-root data/toy --out out || true
-              test -f out/triad_summary.csv || true
-              test -f out/triad_report.json || true
-            else
-              echo "Toy data not found; skipping run."
-            fi
-          else
-            echo "flyby not importable; skipping run."
-          fi
-      - name: Upload toy artifacts (if any)
-        if: always()
+          python -m flyby.triad --data-root data/toy --out out
+          test -f out/triad_summary.csv
+          test -f out/triad_report.json
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: toy-out
           path: out/
-          if-no-files-found: ignore
