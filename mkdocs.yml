@@ -1,0 +1,9 @@
+site_name: Flyby Fingerprints
+repo_url: https://github.com/uwarring82/-flyby-fingerprints-sandbox
+nav:
+  - Home: docs/index.md
+  - Architecture: docs/architecture_overview.md
+  - Systematic Effects: docs/systematic_effects.md
+  - Guardian: docs/guardian_framework.md
+theme:
+  name: material
