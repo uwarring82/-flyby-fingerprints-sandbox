@@ -1,16 +1,13 @@
 ## Summary
--
+Describe the change and which component it touches (simulation / validation / docs).
 
-## Testing
-- [ ] `python tools/format_gate.py`
-- [ ] `pytest`
+## Guardian Impact
+- Physics deviation tests: (n/a | improved | risk)
+- Background coverage: (n/a | improved | risk)
+- Ground-truth integrity: (n/a | improved | risk)
+- ROC/Null harness: (n/a | improved | risk)
 
-## Guardian Checklist
-- [ ] Uncertainty propagation interface
-- [ ] Failure mode documentation section
-- [ ] `requires_cross_validation` flags for H-risk interactions
-
-## Council Sign-off — Phase: Foundation
-- Guardian: ✅ Protective criteria met / ⬜ comments below
-- Architect: ✅ Structural validation passed / ⬜ comments below
-- Integrator: ✅ Milestone completion verified / ⬜ comments below
+## Checklist
+- [ ] Tests added/updated
+- [ ] `scripts/guardian-cli.py` passes locally or explains expected fail
+- [ ] Docs updated

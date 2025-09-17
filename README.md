@@ -1,50 +1,84 @@
-# Flyby Fingerprints Sandbox
+# 🛡️ Flyby Fingerprints: Simulation-First Collision Detection Framework
 
-[![CI - Fast (unit)](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/ci-fast.yml/badge.svg)](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/ci-fast.yml)
-[![CI - Integration (toy)](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/ci-integration.yml/badge.svg)](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/ci-integration.yml)
+> **Critical Notice**  
+> This project is **simulation-first**. Analysis of real data is **gated** by Guardian certification of the simulation + validation stack. PRs into `main` require the **Guardian Validation** CI check to pass.
 
----
+![Guardian Validation](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/guardian-validation.yml/badge.svg)
 
-## Project Aim
+## 🎯 Mission
+Detect weak residual-gas collisions in trapped-ion systems via rigorously validated fingerprint analysis—starting with a comprehensive simulation of all known background/systematic effects.
 
-This sandbox explores how trapped ions respond to **flyby collisions with residual-gas particles**.  
-Our central challenge is to **disentangle true collision fingerprints from background heating mechanisms**.
+## 🏗️ Three-Phase Architecture
 
-**Phase-1 priority:**  
-We are first of all building a **dedicated simulation backbone** that carefully accounts for relevant background sources (technical noise, trap imperfections, patch potentials). Only once these are quantitatively under control will we search for unique flyby signatures.
+- **Phase 1: Simulation Backend (ACTIVE) ✅**  
+  Trapped-ion dynamics (target <0.1% deviation), Tier-1..3 background models, preliminary collision-injection API, Guardian validation framework (ROC, null testing).
+- **Phase 2: Algorithm Development (GATED) 🔗**  
+  Requires certified Phase-1. A-D-M triad pipeline and Heptad analysis.
+- **Phase 3: Real Data Analysis (GATED) 🔗**  
+  Requires certified Phase-2. Historical re-analysis, new campaigns, community portal.
 
----
+> **GATED = dependent on prior certified phase.** Work may proceed on feature branches but **cannot merge to `main`** until certification passes.
 
-## Conceptual Motivation
+## 🚀 Quick Start
 
-Flyby events and their heating signatures carry a remarkable degree of **self-similarity**:
-
-* **Scaling of Interaction Potentials** — The Coulomb force ∝ 1/r makes deflections look similar across scales; small-impact strong events and large-impact weak events form a continuum.
-* **Self-similar distributions** — Many flybys accumulate into power-law tails (Lévy-like), so zooming in reveals the same shape.
-* **Scale-invariant heating dynamics** — Normalized groups (impact parameter / Debye length, collision time / trap period) repeat physics independent of absolute trap scale.
-* **Experimental observables** — Heating rates vs. pressure often follow power laws, signaling scale-invariant processes.
-
-**Critical nuance:** Real traps break strict self-similarity (finite size, RF drive, screening). What survives experimentally are **approximate scaling laws** whose deviations encode valuable, trap-specific physics.
-
----
-
-## Quickstart
-
+### Physicists
 ```bash
+git clone https://github.com/uwarring82/-flyby-fingerprints-sandbox
+cd flyby-fingerprints-sandbox
 python -m venv .venv && source .venv/bin/activate
-pip install -e . -r requirements.txt
-
-# run toy dataset (fast check)
-python -m flyby.triad --data-root data/toy --out out
-
-Outputs:
-    •   out/triad_summary.csv
-    •   out/triad_report.json
+pip install -r requirements.txt
+python -m simulations.validation.guardian_gates  # if present
 ```
 
-⸻
+Algorithm Developers
 
-Next steps
-1.  Simulation backbone: rigorous modeling of background mechanisms.
-2.  Scaling analysis: check if normalized impact-parameter / energy-transfer distributions collapse onto universal curves.
-3.  Fingerprint search: identify deviations from scale-invariance as possible flyby collision signatures.
+```
+# NOTE: Collision injection API is preliminary and may change pending backend completion.
+from simulation_backend import api as sim
+data, gt = sim.generate_background_only_with_markers()
+# Implement your detector; compare to markers/gt.
+```
+
+Experimentalists
+•See /docs/systematic_effects.md for the effect catalog and contribution hooks.
+•Open an issue with your trap parameters to prioritize validation targets.
+
+📊 Status Dashboard
+
+| Component | Status | Guardian State | Progress | Next Milestone |
+| --- | --- | --- | --- | --- |
+| Physics Engine | 🟡 | In Review | ~60% | Coulomb interaction precision sweep |
+| Background Effects | 🟡 | Pending | ~40% | Tier-2 drift & RF pickup models |
+| Collision Injection | 🔴 | Pending | ~10% | Stable API v0 with ground-truth tags |
+| Validation FW | 🟡 | In Review | ~30% | ROC harness + null-hypothesis suite |
+
+Legend (Guardian): Pending → In Review → Passed or Action Required
+
+See STATUS.md for details.
+
+🛡️ Guardian Requirements (merge gates)
+•Physics deviation target: < 0.1% (tracked tests).
+•Tier-1..3 backgrounds modeled with tests & bounds.
+•Ground-truth preservation in I/O and APIs.
+•ROC AUC > 0.95 at 10:1 SNR (sim suites).
+•PRs → CI Guardian Validation must pass.
+
+Run `python scripts/guardian-cli.py --summary-json` for a local snapshot; add
+`--strict` when pending checks should block merges instead of surfacing as
+warnings.
+
+🤝 Contributing
+
+Start with CONTRIBUTING.md. Choose your path:
+•Simulation (physics fidelity, performance)
+•Validation (tests, ROC/Null suites, Guardian)
+•Documentation (effect catalog, tutorials)
+
+📚 Learn More
+•/docs/architecture_overview.md
+•/docs/systematic_effects.md
+•/docs/guardian_framework.md
+•Project docs site (when enabled): see badge/link in STATUS.md
+
+Repository Principle:
+Every unvalidated systematic effect is a potential false discovery waiting to happen.
