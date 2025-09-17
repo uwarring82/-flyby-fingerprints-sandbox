@@ -17,3 +17,11 @@
 - `artifacts/baseline/benchmark_comparisons.json` (≥3 references)
 - `data/metadata/physical_constraints.json` applied by integration
 - CI logs: Guardian Safety Gate (Phase-2 checks) PASS
+---
+### Tri-stance sign-off (2025-09-16)
+
+- **Integrator:** Confirmed baseline artifacts regenerated; coupling map zero.
+- **Guardian:** Validation gates PASS, max coupling 0.0, 3/3 benchmarks PASS.
+- **Architect:** Documentation updated, constraints file sane, dataset flags hardened.
+
+Guardian Gate: **PASS** (2025-09-16T20:28:34+00:00)

@@ -15,6 +15,10 @@ class GateResult:
     passed: bool
     details: str = ""
 
+    @property
+    def ok(self) -> bool:
+        return self.passed
+
 
 def _read_json(p: pathlib.Path) -> Any:
     return json.loads(p.read_text(encoding="utf-8"))
@@ -59,17 +63,29 @@ def check_tests_path() -> GateResult:
 
 # ----------------- Phase 2 checks (new) -----------------
 def check_datasets_yaml_h_flags() -> GateResult:
-    """
-    Ensure every risk: H entry in datasets.yaml has requires_cross_validation: true.
-    No external YAML dep: use a simple text fallback.
-    """
-    if not DATA_META.exists():
-        return GateResult("datasets_yaml_present", False, "data/metadata/datasets.yaml missing")
-    txt = DATA_META.read_text(encoding="utf-8")
-    # Fallback heuristic: if any "risk: H" present, also require the flag string somewhere
-    ok = ("risk: H" not in txt) or ("requires_cross_validation: true" in txt)
-    det = "text-scan fallback; ensure all risk: H entries carry requires_cross_validation: true"
-    return GateResult("h_risk_cross_validation_flags", ok, det)
+    p = DATA_META
+    if not p.exists():
+        return GateResult("datasets_yaml_present", False, f"{p} missing")
+    lines = p.read_text(encoding="utf-8").splitlines()
+    offenders, in_item, item_has_risk_h, item_has_req = [], False, False, False
+
+    def flush():
+        nonlocal offenders, item_has_risk_h, item_has_req
+        if item_has_risk_h and not item_has_req:
+            offenders.append("risk:H item missing requires_cross_validation:true")
+
+    for ln in lines:
+        s = ln.strip()
+        if s.startswith("- "):
+            flush()
+            in_item, item_has_risk_h, item_has_req = True, False, False
+        if "risk:" in s and "H" in s:
+            item_has_risk_h = True
+        if "requires_cross_validation:" in s and "true" in s:
+            item_has_req = True
+    flush()
+    ok = (len(offenders) == 0)
+    return GateResult("h_risk_cross_validation_flags", ok, f"offenders={len(offenders)}")
 
 
 def check_interaction_matrix(max_coupling: float = 0.10) -> GateResult:
