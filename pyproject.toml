@@ -1,14 +1,24 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flyby"
+name = "flyby-fingerprints"
 version = "0.1.0"
-description = "Simulation-first framework for flyby fingerprints"
-authors = [{name = "Flyby Team"}]
-dependencies = []
+description = "Sandbox for background analysis and fly-by collision fingerprints"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+  "numpy>=1.24,<2.0",
+  "pandas>=2.0,<3.0",
+  "scipy>=1.10,<2.0",
+  "pydantic>=2.6,<3.0"
+]
 
-[tool.black]
-line-length = 88
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+pythonpath = ["src"]
 
+[tool.setuptools.packages.find]
+where = ["src"]
