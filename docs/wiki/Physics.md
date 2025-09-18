@@ -15,4 +15,11 @@ Motional heating in RF Paul traps can arise from:
 ### Confounders & controls
 - Micromotion (RF), laser scatter, servo or digitizer artifacts, pressure/temperature drift, analysis pipeline bias. Mitigate via pre-registration, blinding of toggles, hardware heterogeneity, and end-to-end synthetic injections.
 
+## Background mechanisms (detailed pages)
+- [Electric-Field Noise (“Anomalous Heating”)](Backgrounds---Electric-Field-Noise-(Anomalous-Heating))
+- [Technical Noise (RF and DAC)](Backgrounds---Technical-Noise-(RF-and-DAC))
+- [Excess Micromotion & RF Coupling](Backgrounds---Excess-Micromotion-and-RF-Coupling)
+- [Background-Gas Collisions (“Thermal Flybys”)](Backgrounds---Background-Gas-Collisions-(Thermal-Flybys))
+- [Laser & Optics Channels](Backgrounds---Laser-and-Optics)
+
 For deeper background, see [References](References.md).
