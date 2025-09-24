@@ -1,0 +1,73 @@
+{
+  "last_updated": "2025-09-24T10:48:17Z",
+  "provenance_run_url": null,
+  "modules": [
+    {
+      "key": "physics_engine",
+      "title": "Physics Engine",
+      "status": "in_review",
+      "completion_pct": 60,
+      "owner": "uwarring82",
+      "depends_on": [],
+      "risk": {
+        "level": "Medium",
+        "driver": "Coulomb precision tuning requires HPC optimization",
+        "mitigation": "Schedule GPU acceleration sprint and validate results against analytic benchmarks"
+      },
+      "next_milestone_issue": 101,
+      "eta": "2024-06-15"
+    },
+    {
+      "key": "background_effects",
+      "title": "Background Effects",
+      "status": "pending",
+      "completion_pct": 40,
+      "owner": "tess.alvarez",
+      "depends_on": [
+        "physics_engine"
+      ],
+      "risk": {
+        "level": "High",
+        "driver": "Tier-2 drift model lacks calibration data",
+        "mitigation": "Acquire calibration runs and extend Guardian synthetic suites"
+      },
+      "next_milestone_issue": 102,
+      "eta": "2024-07-05"
+    },
+    {
+      "key": "collision_injection",
+      "title": "Collision Injection",
+      "status": "blocked",
+      "completion_pct": 10,
+      "owner": "marco.chen",
+      "depends_on": [
+        "physics_engine",
+        "background_effects"
+      ],
+      "risk": {
+        "level": "High",
+        "driver": "Stable API contract pending validation feedback",
+        "mitigation": "Align API schema with validation framework and add integration tests"
+      },
+      "next_milestone_issue": 103,
+      "eta": "2024-08-01"
+    },
+    {
+      "key": "validation_fw",
+      "title": "Validation Framework",
+      "status": "in_review",
+      "completion_pct": 30,
+      "owner": "priya.nair",
+      "depends_on": [
+        "physics_engine"
+      ],
+      "risk": {
+        "level": "Medium",
+        "driver": "ROC harness lacks null-hypothesis regression coverage",
+        "mitigation": "Expand null test suites and enforce Guardian thresholds in CI"
+      },
+      "next_milestone_issue": 104,
+      "eta": "2024-06-30"
+    }
+  ]
+}
