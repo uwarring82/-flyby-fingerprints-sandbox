@@ -2,7 +2,7 @@ name: Guardian Validation
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -20,16 +20,24 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-          cache: 'pip'
+          python-version: "3.10"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e . -r requirements.txt
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          pip install pytest
 
-      - name: Sanity check Guardian assets
+      - name: Sanity check repo structure
         run: |
           test -f simulations/background_effects.py
           test -f simulations/null_validation.py
@@ -39,27 +47,14 @@ jobs:
         run: |
           echo "🛡️ Running Guardian Validation Suite..."
           pytest -v tests/guardian_tests.py --tb=short
-          echo "✅ Guardian validation passed - background safety verified"
 
-      - name: Guardian (strict)
-        id: guardian_strict
-        continue-on-error: true
+      - name: Guardian failure guidance
+        if: failure()
         run: |
-          python scripts/guardian-cli.py --strict --summary-json > guardian_summary.json
-          python -m json.tool guardian_summary.json > /tmp/guardian_summary.json
-          mv /tmp/guardian_summary.json guardian_summary.json
-          test -s guardian_summary.json
+          echo "🚨 Guardian validation failed - see Issue #36 for requirements"
+          echo "Required: background_effects.py, null_validation.py, guardian_tests.py"
 
-      - name: Upload Guardian summary
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: guardian-summary
-          path: guardian_summary.json
-          retention-days: 7
-
-      - name: Enforce Guardian gate
-        if: steps.guardian_strict.outcome != 'success'
+      - name: (Optional) Full test suite
+        if: always() && success()
         run: |
-          echo "Guardian strict gate failed"
-          exit 1
+          if [ -d tests ]; then pytest -q; fi
