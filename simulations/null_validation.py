@@ -188,15 +188,38 @@ def false_positive_rate_validation(
     if detection_threshold <= 0:
         raise ValueError("detection_threshold must be positive")
 
+    # Build a lookup of the expected background means so that we can evaluate
+    # deviations relative to the catalogue baseline instead of zero.  Several
+    # components intentionally have non-zero offsets which otherwise inflate
+    # the false-positive metric purely due to deterministic bias.
+    catalogue = _catalogue()
+    expected_mean_by_name = {component.name: component.mean for component in catalogue}
+
     rates: list[float] = []
     for dataset in datasets:
         data = dataset.data
         n = data.shape[0]
+
+        missing = [name for name in dataset.component_names if name not in expected_mean_by_name]
+        if missing:
+            missing_names = ", ".join(missing)
+            raise KeyError(
+                "Dataset component names are not present in Guardian catalogue: "
+                f"{missing_names}"
+            )
+
+        expected_means = np.array(
+            [expected_mean_by_name[name] for name in dataset.component_names]
+        )
+
         std = data.std(axis=0, ddof=1)
         # Guard against zero variance; those channels are treated as benign.
         safe_std = np.where(std > 0, std, 1.0)
         se = safe_std / sqrt(float(n))
-        z_scores = np.abs(data.mean(axis=0) / se)
+
+        mean_bias = data.mean(axis=0) - expected_means
+        z_scores = np.abs(mean_bias / se)
+
         rate = float(np.mean(z_scores > detection_threshold))
         rates.append(max(0.0, min(1.0, rate)))
 
