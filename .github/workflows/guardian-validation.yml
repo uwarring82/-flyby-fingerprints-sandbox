@@ -41,13 +41,25 @@ jobs:
           pytest -v tests/guardian_tests.py --tb=short
           echo "✅ Guardian validation passed - background safety verified"
 
-      - name: Guardian failure guidance
-        if: failure()
+      - name: Guardian (strict)
+        id: guardian_strict
+        continue-on-error: true
         run: |
-          echo "🚨 Guardian validation failed - see Issue #36 for requirements"
-          echo "Required: background_effects.py, null_validation.py, guardian_tests.py"
+          python scripts/guardian-cli.py --strict --summary-json > guardian_summary.json
+          python -m json.tool guardian_summary.json > /tmp/guardian_summary.json
+          mv /tmp/guardian_summary.json guardian_summary.json
+          test -s guardian_summary.json
 
-      - name: (Optional) full test suite
-        if: github.event_name == 'workflow_dispatch'
+      - name: Upload Guardian summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guardian-summary
+          path: guardian_summary.json
+          retention-days: 7
+
+      - name: Enforce Guardian gate
+        if: steps.guardian_strict.outcome != 'success'
         run: |
-          if [ -d tests ]; then pytest -q; fi
+          echo "Guardian strict gate failed"
+          exit 1

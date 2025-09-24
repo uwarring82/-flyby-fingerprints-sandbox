@@ -1,0 +1,87 @@
+name: Update Status Dashboard
+
+on:
+  workflow_run:
+    workflows: ["Guardian Validation"]
+    types:
+      - completed
+  push:
+    branches: ["main"]
+    paths:
+      - "status/status.yml"
+      - "scripts/update_status_dashboard.py"
+      - "guardian_summary.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    name: Render status dashboard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine checkout parameters
+        id: checkout-meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "branch=${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_OUTPUT"
+            echo "repository=${{ github.event.workflow_run.head_repository.full_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=${{ github.ref }}" >> "$GITHUB_OUTPUT"
+            echo "repository=${{ github.repository }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.checkout-meta.outputs.repository }}
+          ref: ${{ steps.checkout-meta.outputs.branch }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Download Guardian summary artifact
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          name: guardian-summary
+          run-id: ${{ github.event.workflow_run.id }}
+          path: .
+
+      - name: Export provenance link
+        run: |
+          echo "GITHUB_RUN_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_ENV"
+
+      - name: Render dashboard
+        run: |
+          python scripts/update_status_dashboard.py
+
+      - name: Commit dashboard updates
+        id: commit
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md STATUS.md status/status.yml
+            git commit -m "chore(dashboard): auto-update status dashboard"
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No dashboard changes detected"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push changes
+        if: steps.checkout-meta.outputs.branch != '' && steps.commit.outputs.committed == 'true'
+        run: |
+          git push origin HEAD:${{ steps.checkout-meta.outputs.branch }}
