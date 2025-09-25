@@ -1,14 +1,16 @@
-SPDX-License-Identifier: GPL-3.0-or-later
+# Flyby Fingerprints — Project Wiki
 
-# flyby-fingerprints — Project Wiki
+**Owner:** @uwarring82  
+**Mission:** Background-first, simulation-certified detection of weak residual-gas (“fly-by”) collisions in trapped-ion systems.
 
-**Purpose.** This open, GPLv3 research program develops robust methods to identify *fingerprints of fly-by (residual-gas) collisions* in trapped-ion heating-rate measurements. We start with **simulated sandbox datasets** to validate the *Fast Triad (A–D–M)* screening and will later test on PAULA (lab “one-world” data). Longer-term, we invite other ion-trapping groups to contribute datasets under shared schemas.
+## Entry Points
+- **Status Dashboard:** see repository `README.md`
+- **Background Model Explorer (Binder):** interactive notebook to explore backgrounds and run Guardian checks
+- **Guardian Framework:** merge gates, success metrics, and CI wiring
 
-**Approach (Fast Triad).**
-- **Analog (A):** mode-resolved heating vs. frequency to test for impulsive admixtures beyond power-law backgrounds.
-- **Digital (D):** burstiness and runs in interleaved binary trials (e.g., RSB/BSB).
-- **Memory (M):** short-lag correlations in event-time streams (e.g., Ljung–Box, Allan variance).
+## Phases
+1. Phase 1 — Simulation Backend (ACTIVE)  
+2. Phase 2 — Algorithm Development (GATED)  
+3. Phase 3 — Real Data Analysis (GATED)
 
-**Principles.** Honesty, openness, reproducibility. All code and analyses are public from day one; derivatives remain open (GPLv3). We use modern tooling (e.g., ChatGPT/Codex) within a human-supervised, transparent workflow.
-
-See: [Physics](Physics.md) · [Data and Workflow](Data-and-Workflow.md) · [Contributing](Contributing.md) · [References](References.md)
+See pages: *Background Effects*, *Guardian Framework*, *Roadmap*.
