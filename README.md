@@ -1,5 +1,8 @@
 # 🛡️ Flyby Fingerprints: Simulation-First Collision Detection Framework
 
+[![Launch in Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/uwarring82/-flyby-fingerprints-sandbox/HEAD?labpath=notebooks%2FBackground_Model_Explorer.ipynb)
+[![Launch in Voilà](https://img.shields.io/badge/voilà-dashboard-green)](https://mybinder.org/v2/gh/uwarring82/-flyby-fingerprints-sandbox/HEAD?urlpath=voila/render/notebooks/Background_Model_Explorer_APP.ipynb)
+
 > **Critical Notice**  
 > This project is **simulation-first**. Analysis of real data is **gated** by Guardian certification of the simulation + validation stack. PRs into `main` require the **Guardian Validation** CI check to pass.
 

@@ -1,0 +1,16 @@
+name: flyby-binder
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy>=1.26
+  - scipy>=1.11
+  - matplotlib>=3.8
+  - ipywidgets>=8.1
+  - jupyterlab>=4
+  - notebook>=7
+  - pip
+  - pip:
+      - voila>=0.5.6
+      - jupytext>=1.16
+      - .
