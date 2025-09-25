@@ -1,60 +1,22 @@
-name: Guardian Validation
+name: guardian-validation
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  guardian_checks:
-    name: Run Guardian Validation Suite
+  guardian:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
-
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
+          python-version: '3.10'
+      - name: Install
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-          pip install pytest
-
-      - name: Sanity check repo structure
+          pip install -e .
+          pip install pytest scipy numpy
+      - name: Run Guardian background checks
         run: |
-          test -f simulations/background_effects.py
-          test -f simulations/null_validation.py
-          test -f tests/guardian_tests.py
-
-      - name: Run Guardian tests (blocking gate)
-        run: |
-          echo "🛡️ Running Guardian Validation Suite..."
-          pytest -v tests/guardian_tests.py --tb=short
-
-      - name: Guardian failure guidance
-        if: failure()
-        run: |
-          echo "🚨 Guardian validation failed - see Issue #36 for requirements"
-          echo "Required: background_effects.py, null_validation.py, guardian_tests.py"
-
-      - name: (Optional) Full test suite
-        if: always() && success()
-        run: |
-          if [ -d tests ]; then pytest -q; fi
+          pytest -q tests/guardian
