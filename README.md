@@ -59,6 +59,32 @@ python scripts/run_background_sim.py \
 Outputs appear in artifacts/simulations/:
 - <stamp>_time_series.png, <stamp>_psd.png, <stamp>_allan.png
 - <stamp>_guardian_report.json, <stamp>_config.json
+- <stamp>_overview.html (open in a browser for a quick gallery view)
+
+Preview the results by opening the generated HTML overview (replace with your
+timestamp):
+
+```bash
+python -m webbrowser artifacts/simulations/20250101T120000_overview.html
+```
+
+The page embeds the three plots and inlines the Guardian JSON summary so you
+can review everything without hunting for individual files.
+
+#### One-shot verification
+
+```bash
+# Create/refresh environment
+conda env remove -n flyby -y || true
+conda env create -f environment.yml
+conda activate flyby
+
+# Run the plotting script with typical parameters
+python scripts/run_background_sim.py \
+  --T 300 --rf_rms 1.0 --mains 60 --em_coupling 0.002 \
+  --patch 20 --corr 200 --cps 500 --tint 2.0 \
+  --n_samples 20000 --dt 1e-4 --seed 42
+```
 
 ### Physicists
 ```bash

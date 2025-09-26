@@ -2,6 +2,6 @@
 set -euxo pipefail
 jupyter nbextension enable --py widgetsnbextension --sys-prefix || true
 python - << 'PY'
-import numpy, scipy, ipywidgets, matplotlib, pandas
+import numpy, scipy, ipywidgets, matplotlib
 print("Binder imports OK")
 PY
