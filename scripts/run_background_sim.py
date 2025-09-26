@@ -12,6 +12,7 @@ Outputs (written to artifacts/simulations/<timestamp>_*.{png,json}):
 
 import argparse
 import json
+import textwrap
 import sys
 import time
 from collections.abc import Mapping
@@ -229,13 +230,57 @@ def run_and_save(
     _plot_psd_em(data, dt_s, outdir_p / f"{stamp}_psd.png")
     _plot_allan_like_surface(data, dt_s, outdir_p / f"{stamp}_allan.png")
 
-    return report, {
+    files = {
         "config": str(outdir_p / f"{stamp}_config.json"),
         "report": str(outdir_p / f"{stamp}_guardian_report.json"),
         "time_series_png": str(outdir_p / f"{stamp}_time_series.png"),
         "psd_png": str(outdir_p / f"{stamp}_psd.png"),
         "allan_png": str(outdir_p / f"{stamp}_allan.png"),
     }
+
+    overview_path = outdir_p / f"{stamp}_overview.html"
+    overview_path.write_text(
+        textwrap.dedent(
+            f"""
+            <!DOCTYPE html>
+            <html lang=\"en\">
+            <head>
+              <meta charset=\"utf-8\" />
+              <title>Flyby Background Simulation – {stamp}</title>
+              <style>
+                body {{ font-family: system-ui, sans-serif; margin: 1.5rem; }}
+                img {{ max-width: 100%; height: auto; border: 1px solid #ddd; padding: 0.5rem; background: #fafafa; }}
+                .panel {{ margin-bottom: 2rem; }}
+                pre {{ background: #f5f5f5; padding: 1rem; overflow: auto; }}
+              </style>
+            </head>
+            <body>
+              <h1>Background simulation snapshot – {stamp}</h1>
+              <section class=\"panel\">
+                <h2>Guardian summary</h2>
+                <pre>{json.dumps(_json_compatible(report), indent=2)}</pre>
+              </section>
+              <section class=\"panel\">
+                <h2>Time series</h2>
+                <img src=\"{Path(files['time_series_png']).name}\" alt=\"Time series plot\" />
+              </section>
+              <section class=\"panel\">
+                <h2>EM pickup PSD</h2>
+                <img src=\"{Path(files['psd_png']).name}\" alt=\"EM pickup PSD\" />
+              </section>
+              <section class=\"panel\">
+                <h2>Surface drift Allan-like variance</h2>
+                <img src=\"{Path(files['allan_png']).name}\" alt=\"Surface drift Allan-like variance\" />
+              </section>
+            </body>
+            </html>
+            """
+        ).strip()
+    )
+
+    files["overview_html"] = str(overview_path)
+
+    return report, files
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -299,8 +344,8 @@ def main() -> None:
         show_surf=not args.hide_surf,
         show_det=not args.hide_det,
     )
-    print("Guardian report:", json.dumps(report, indent=2))
-    print("Files:", json.dumps(files, indent=2))
+    print("Guardian report:", json.dumps(_json_compatible(report), indent=2))
+    print("Files:", json.dumps(_json_compatible(files), indent=2))
 
 
 if __name__ == "__main__":
