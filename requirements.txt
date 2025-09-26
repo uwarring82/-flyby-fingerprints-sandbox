@@ -1,5 +1,14 @@
-numpy>=1.24,<2.0
-pandas>=2.0,<3.0
-scipy>=1.10,<2.0
-pydantic>=2.6,<3.0
-pytest>=7.4,<9.0
+# Core numerics
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+pandas>=2.1
+
+# Notebook / UI
+ipywidgets>=8.1
+jupyterlab>=4
+notebook>=7
+voila>=0.5.6
+
+# Testing
+pytest>=7.4

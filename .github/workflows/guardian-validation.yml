@@ -15,8 +15,8 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: |
+          pip install -r requirements.txt
           pip install -e .
-          pip install pytest scipy numpy
       - name: Run Guardian background checks
         run: |
           pytest -q tests/guardian

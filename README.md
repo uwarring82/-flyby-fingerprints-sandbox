@@ -24,12 +24,31 @@ Detect weak residual-gas collisions in trapped-ion systems via rigorously valida
 
 ## 🚀 Quick Start
 
+**Python:** 3.11 (tested)
+
+### Quick setup
+```bash
+# Conda (recommended)
+conda env create -f environment.yml
+conda activate flyby
+
+# or: pip
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+# (optional) install package in editable mode
+pip install -e .
+```
+
+Launch the Background Model Explorer
+
+```bash
+jupyter lab notebooks/Background_Model_Explorer.ipynb
+```
+
 ### Physicists
 ```bash
 git clone https://github.com/uwarring82/-flyby-fingerprints-sandbox
 cd flyby-fingerprints-sandbox
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
 python -m simulations.validation.guardian_gates  # if present
 ```
 

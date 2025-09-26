@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 jupyter nbextension enable --py widgetsnbextension --sys-prefix || true
-python - <<'PY'
-import numpy, scipy, ipywidgets, matplotlib
-from importlib import import_module
-import_module('simulation.background_effects_simulator')
+python - << 'PY'
+import numpy, scipy, ipywidgets, matplotlib, pandas
 print("Binder imports OK")
 PY
