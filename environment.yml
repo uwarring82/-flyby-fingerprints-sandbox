@@ -1,13 +1,16 @@
-
-name: flyby-fingerprints
+name: flyby
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
-  - numpy
-  - scipy
-  - pandas
-  - matplotlib
+  - python=3.11
+  - numpy>=1.26
+  - scipy>=1.11
+  - matplotlib>=3.8
+  - ipywidgets>=8.1
+  - jupyterlab>=4
+  - notebook>=7
+  - pytest>=7.4
   - pip
   - pip:
-      - jupyter
+      - voila>=0.5.6
+      - .
