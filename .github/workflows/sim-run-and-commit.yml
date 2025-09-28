@@ -1,0 +1,151 @@
+name: sim-run-and-commit
+on:
+  workflow_dispatch:
+    inputs:
+      preset:
+        description: "Simulation preset"
+        required: true
+        default: "default"
+        type: choice
+        options: [default, mains60, strong_patch]
+      n_samples:
+        description: "Samples"
+        required: true
+        default: "20000"
+      dt_s:
+        description: "dt [s]"
+        required: true
+        default: "1e-4"
+      seed:
+        description: "PRNG seed"
+        required: true
+        default: "42"
+  schedule:
+    - cron: "0 2 * * 1"  # Mondays 02:00 UTC (adjust as needed)
+
+permissions:
+  contents: write   # needed to push commits with GITHUB_TOKEN
+
+jobs:
+  run-sim:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (target ref)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Resolve preset to parameters
+        id: params
+        shell: bash
+        run: |
+          PRESET="${{ github.event.inputs.preset || 'default' }}"
+          if [ "$PRESET" = "mains60" ]; then
+            echo "T=300" >> $GITHUB_OUTPUT
+            echo "rf=1.5" >> $GITHUB_OUTPUT
+            echo "mains=60" >> $GITHUB_OUTPUT
+            echo "patch=5" >> $GITHUB_OUTPUT
+            echo "corr=50" >> $GITHUB_OUTPUT
+            echo "cps=200" >> $GITHUB_OUTPUT
+            echo "tint=1.0" >> $GITHUB_OUTPUT
+          elif [ "$PRESET" = "strong_patch" ]; then
+            echo "T=300" >> $GITHUB_OUTPUT
+            echo "rf=0.5" >> $GITHUB_OUTPUT
+            echo "mains=50" >> $GITHUB_OUTPUT
+            echo "patch=20" >> $GITHUB_OUTPUT
+            echo "corr=200" >> $GITHUB_OUTPUT
+            echo "cps=200" >> $GITHUB_OUTPUT
+            echo "tint=1.0" >> $GITHUB_OUTPUT
+          else
+            echo "T=300" >> $GITHUB_OUTPUT
+            echo "rf=0.5" >> $GITHUB_OUTPUT
+            echo "mains=50" >> $GITHUB_OUTPUT
+            echo "patch=5" >> $GITHUB_OUTPUT
+            echo "corr=50" >> $GITHUB_OUTPUT
+            echo "cps=200" >> $GITHUB_OUTPUT
+            echo "tint=1.0" >> $GITHUB_OUTPUT
+          fi
+          echo "ns=${{ github.event.inputs.n_samples || '20000' }}" >> $GITHUB_OUTPUT
+          echo "dt=${{ github.event.inputs.dt_s || '1e-4' }}" >> $GITHUB_OUTPUT
+          echo "seed=${{ github.event.inputs.seed || '42' }}" >> $GITHUB_OUTPUT
+
+      - name: Run simulation
+        run: |
+          mkdir -p artifacts/simulations/ci
+          python scripts/run_background_sim.py \
+            --T ${{ steps.params.outputs.T }} \
+            --rf_rms ${{ steps.params.outputs.rf }} \
+            --mains ${{ steps.params.outputs.mains }} \
+            --em_coupling 0.001 \
+            --patch ${{ steps.params.outputs.patch }} \
+            --corr ${{ steps.params.outputs.corr }} \
+            --cps ${{ steps.params.outputs.cps }} \
+            --tint ${{ steps.params.outputs.tint }} \
+            --n_samples ${{ steps.params.outputs.ns }} \
+            --dt ${{ steps.params.outputs.dt }} \
+            --seed ${{ steps.params.outputs.seed }} \
+            --outdir artifacts/simulations/ci
+
+      - name: Keep only last 10 CI runs per preset (prune)
+        run: |
+          python - <<'PY'
+          import os, re, json, pathlib
+          root = pathlib.Path("artifacts/simulations/ci")
+          if not root.exists(): raise SystemExit(0)
+          # group by date prefix (YYYYMMDDTHHMMSS) regardless of preset
+          files = sorted(root.glob("*_config.json"))
+          # extract timestamp from filename
+          def stamp(p): return re.search(r"(\d{8}T\d{6})_config\\.json$", p.name).group(1)
+          groups = {}
+          for f in files:
+            s = stamp(f)
+            groups.setdefault(s, []).append(f)
+          stamps = sorted(groups.keys(), reverse=True)
+          for old in stamps[10:]:
+            # remove all files sharing the same stamp prefix
+            for g in root.glob(f"{old}_*"):
+              g.unlink(missing_ok=True)
+          PY
+
+      # === Option A: push to a dedicated branch 'sim-results' ===
+      - name: Switch to results branch (create if missing)
+        run: |
+          git fetch origin sim-results || true
+          if git rev-parse --verify origin/sim-results >/dev/null 2>&1; then
+            git checkout sim-results
+            git merge --no-edit ${{ github.ref_name }}
+          else
+            git checkout -b sim-results
+          fi
+
+      - name: Stage results
+        run: |
+          git add artifacts/simulations/ci
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "ci(sim): add background sim results [skip ci]" || echo "No changes"
+
+      - name: Push results branch
+        run: |
+          git push origin sim-results
+
+      # === Option B (disabled by default): commit into main ===
+      # To enable, comment Option A and uncomment the block below.
+      # - name: Commit to main (guard recursive triggers)
+      #   if: false  # set to true to enable Option B
+      #   run: |
+      #     git add artifacts/simulations/ci
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git commit -m "ci(sim): add background sim results [skip ci]" || echo "No changes"
+      #     git push origin HEAD:main
