@@ -174,6 +174,7 @@ def run_and_save(
     show_em: bool = True,
     show_surf: bool = True,
     show_det: bool = True,
+    disable_physics: bool = False,
 ):
     stamp = time.strftime("%Y%m%dT%H%M%S")
     outdir_p = Path(outdir)
@@ -193,6 +194,9 @@ def run_and_save(
     data = simulate_background_timeseries(
         n_samples=n_samples, dt_s=dt_s, cfg=cfg, seed=seed
     )
+    if disable_physics:
+        data["position"] = np.zeros_like(data["position"])
+        data["heating_rate"] = 0.0
     report = guardian_check_backgrounds(data)
 
     # save config + report
@@ -321,6 +325,11 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--hide_det", action="store_true", help="Hide detector counts trace"
     )
+    p.add_argument(
+        "--disable_physics",
+        action="store_true",
+        help="Zero the position/heating channels to produce a null variant",
+    )
     return p
 
 
@@ -343,6 +352,7 @@ def main() -> None:
         show_em=not args.hide_em,
         show_surf=not args.hide_surf,
         show_det=not args.hide_det,
+        disable_physics=args.disable_physics,
     )
     print("Guardian report:", json.dumps(_json_compatible(report), indent=2))
     print("Files:", json.dumps(_json_compatible(files), indent=2))

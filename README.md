@@ -79,6 +79,10 @@ python -m webbrowser artifacts/simulations/20250101T120000_overview.html
 The page embeds the three plots and inlines the Guardian JSON summary so you
 can review everything without hunting for individual files.
 
+### Reproducibility & Reporting
+
+- [Wiki: Simulation Report Standard (Phase 1)](docs/wiki/Simulation_Report_Standard_(Phase_1).md)
+
 #### One-shot verification
 
 ```bash
