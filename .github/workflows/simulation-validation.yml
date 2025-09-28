@@ -1,0 +1,27 @@
+name: simulation-validation
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "simulation/**"
+      - "REPORTING.md"
+      - "artifacts/reports/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
+      - name: Generate sample report (smoke)
+        run: python scripts/generate_report.py --preset default --outdir artifacts/reports
+      - name: Validate statistics (Guardian gate)
+        run: python scripts/validate_statistics.py artifacts/reports
