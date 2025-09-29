@@ -1,182 +1,84 @@
-# 🛡️ Flyby Fingerprints: Simulation-First Collision Detection Framework
+# Fly-by Fingerprints Sandbox
 
-[![Launch Background Model Explorer in Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/uwarring82/-flyby-fingerprints-sandbox/HEAD?labpath=notebooks%2FBackground_Model_Explorer.ipynb)
-[![Launch Explorer via Voilà](https://img.shields.io/badge/Voilà-launch-blue.svg)](https://mybinder.org/v2/gh/uwarring82/-flyby-fingerprints-sandbox/HEAD?urlpath=voila/render/notebooks/Background_Model_Explorer_APP.ipynb)
+Ion–neutral collision signatures in trapped-ion systems: a sandbox to develop the theory, numerics, and experimental playbooks needed to detect and interpret fly-by events.
 
-> **Critical Notice**  
-> This project is **simulation-first**. Analysis of real data is **gated** by Guardian certification of the simulation + validation stack. PRs into `main` require the **Guardian Validation** CI check to pass.
+> **Working mode:** Three tracks run in parallel — **Theory (priority 1)**, **Numerics (priority 2)**, **Experiments (priority 3)** — with agile, rolling decisions.
 
-![Guardian Validation](https://github.com/uwarring82/-flyby-fingerprints-sandbox/actions/workflows/guardian-validation.yml/badge.svg)
+---
 
-## 🎯 Mission
-Detect weak residual-gas collisions in trapped-ion systems via rigorously validated fingerprint analysis—starting with a comprehensive simulation of all known background/systematic effects.
+## Tracks
 
-## 🏗️ Three-Phase Architecture
+### 1) Theory (Priority 1)
+- Purpose: Define foundational physics, interactions, and observable mappings.
+- Outputs: Pillar docs (P1–P9), acceptance checklists, validation snippets, shared glossary.
+- Start here if you’re new.
 
-- **Phase 1: Simulation Backend (ACTIVE) ✅**  
-  Trapped-ion dynamics (target <0.1% deviation), Tier-1..3 background models, preliminary collision-injection API, Guardian validation framework (ROC, null testing).
-- **Phase 2: Algorithm Development (GATED) 🔗**  
-  Requires certified Phase-1. A-D-M triad pipeline and Heptad analysis.
-- **Phase 3: Real Data Analysis (GATED) 🔗**  
-  Requires certified Phase-2. Historical re-analysis, new campaigns, community portal.
+**Entry point:** [`theory/`](theory/) • Glossary: [`theory/_glossary.md`](theory/_glossary.md)
 
-> **GATED = dependent on prior certified phase.** Work may proceed on feature branches but **cannot merge to `main`** until certification passes.
+### 2) Numerics (Priority 2)
+- Purpose: Reliable simulation of ion motion, collisions, and decoherence with tested benchmarks.
+- Outputs: MD/symplectic integrators, MC collision kernels, convergence tests, CI.
 
-## 🚀 Quick Start
+**Entry point:** [`numerics/`](numerics/)
 
-**Python:** 3.11 (tested)
+### 3) Experiments (Priority 3)
+- Purpose: Practical procedures, calibration, and data-taking templates to validate predictions.
+- Outputs: Setup notes, checklists, acquisition scripts, analysis notebooks.
 
-### Quick setup
+**Entry point:** [`experiments/`](experiments/)
+
+---
+
+## Scaffold: Pillars (titles only)
+- **P1** Single-Ion Dynamics  
+- **P2** Collision Fundamentals  
+- **P3** Collective Modes in Ion Chains  
+- **P4** Statistical Mechanics of Collisions  
+- **P5** Structural & Plasma Regimes  
+- **P6** Open Quantum System Dynamics  
+- **P7** Detection & Measurement Theory  
+- **P8** Experimental Systematics & Backgrounds  
+- **P9** Numerical Methods & Computational Validation
+
+*(Details live in the `theory/` track; numerics/experiments consume those interfaces.)*
+
+---
+
+## Quick Start
+
 ```bash
-# Conda (recommended)
-conda env create -f environment.yml
-conda activate flyby
+# clone
+git clone https://github.com/uwarring82/-flyby-fingerprints-sandbox.git
+cd -flyby-fingerprints-sandbox
 
-# or: pip
+# set up python env (example)
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-# (optional) install package in editable mode
-pip install -e .
+pip install -r requirements.txt  # if present
+
+# run sample validations (when available)
+# python theory/validation/P1_trap_frequencies.py
+# python numerics/tests/test_integrators.py
 ```
 
-Launch the Background Model Explorer
+---
 
-```bash
-jupyter lab notebooks/Background_Model_Explorer.ipynb
-```
+## Contributing & Reviews
+- Branching: `feat/<track>-<short-name>` (e.g., `feat/theory-p2-langevin`).
+- PRs: Small, focused; include a checklist line for what was validated.
+- Reviews: Guardian checks acceptance items; Architect checks structure; Integrator merges.
+- Glossary discipline: Add/modify symbols only in [`theory/_glossary.md`](theory/_glossary.md); link from your doc.
+- Docs style: Keep it concise; one file per topic; cross-link instead of duplicating.
 
-### Interactive / Notebooks
+---
 
-#### Run a background simulation from CLI
+## Roadmap & Working Agreements
+- Parallel tracks with rolling gates; Phase-2 (numerics) may start once Theory drafts provide safe-to-consume interfaces.
+- Minimal viable drafts first; refine iteratively.
+- Validation first: every new model or kernel ships with a tiny, runnable check.
 
-```bash
-python scripts/run_background_sim.py \
-  --T 300 --rf_rms 1.0 --mains 60 --em_coupling 0.002 \
-  --patch 20 --corr 200 --cps 500 --tint 2.0 \
-  --n_samples 20000 --dt 1e-4 --seed 42
-```
+---
 
-Outputs appear in artifacts/simulations/:
-- <stamp>_time_series.png, <stamp>_psd.png, <stamp>_allan.png
-- <stamp>_guardian_report.json, <stamp>_config.json
-- <stamp>_overview.html (open in a browser for a quick gallery view)
+## License & Acknowledgements
+- License: See [`LICENSE`](LICENSE).
+- Contributors: Council-3 (Architect, Guardian, Integrator) and collaborators.
 
-### CI Simulation Artifacts
-Results auto-generated by GitHub Actions (branch: `sim-results`):
-
-- **Browse latest outputs:** `artifacts/simulations/ci/` on the `sim-results` branch  
-- **Trigger a new run:** Actions → *sim-run-and-commit* → *Run workflow* (choose preset & params)
-
-https://github.com/uwarring82/-flyby-fingerprints-sandbox/tree/sim-results/artifacts/simulations/ci
-
-Preview the results by opening the generated HTML overview (replace with your
-timestamp):
-
-```bash
-python -m webbrowser artifacts/simulations/20250101T120000_overview.html
-```
-
-The page embeds the three plots and inlines the Guardian JSON summary so you
-can review everything without hunting for individual files.
-
-### Reproducibility & Reporting
-
-- [Wiki: Simulation Report Standard (Phase 1)](docs/wiki/Simulation_Report_Standard_(Phase_1).md)
-
-#### One-shot verification
-
-```bash
-# Create/refresh environment
-conda env remove -n flyby -y || true
-conda env create -f environment.yml
-conda activate flyby
-
-# Run the plotting script with typical parameters
-python scripts/run_background_sim.py \
-  --T 300 --rf_rms 1.0 --mains 60 --em_coupling 0.002 \
-  --patch 20 --corr 200 --cps 500 --tint 2.0 \
-  --n_samples 20000 --dt 1e-4 --seed 42
-```
-
-### Physicists
-```bash
-git clone https://github.com/uwarring82/-flyby-fingerprints-sandbox
-cd flyby-fingerprints-sandbox
-python -m simulations.validation.guardian_gates  # if present
-```
-
-Algorithm Developers
-
-```
-# NOTE: Collision injection API is preliminary and may change pending backend completion.
-from simulation_backend import api as sim
-data, gt = sim.generate_background_only_with_markers()
-# Implement your detector; compare to markers/gt.
-```
-
-Experimentalists
-•See /docs/systematic_effects.md for the effect catalog and contribution hooks.
-•Open an issue with your trap parameters to prioritize validation targets.
-
-📊 Status Dashboard
-
-### Status Dashboard
-
-Last updated: 2025-09-25T14:00:00Z · [Provenance](./STATUS.md)
-
-- **Physics Engine** — **In Review** (~60%) — **Owner:** @uwarring82 — **Risk:** Medium<br>
-  **Next milestone:** Coulomb precision sweep & integrator validation (tests under `tests/physics/`)<br>
-  **Notes:** Target <0.1% deviation on analytic benchmarks; prep for adaptive step control.
-
-- **Background Effects** — **Active** (~50%) — **Owner:** @uwarring82 — **Risk:** High<br>
-  **Next milestone:** Tier-2 drift & RF pickup model calibration; finalize `systematic_effect_analysis.py` (PSD + Allan)<br>
-  **Notes:** **Background Model Explorer** live via Binder (see badges below); Guardian null-95 & SNR wiring in place.
-
-- **Collision Injection** — **Pending** (~15%) — **Owner:** @uwarring82 — **Risk:** High<br>
-  **Next milestone:** Stabilize injection I/O schema with ground-truth tags; add `examples/run_collision_injection.py`<br>
-  **Notes:** Blocked on Physics + Background partial certification; start with Tier-1 backgrounds.
-
-- **Validation Framework** — **In Review** (~40%) — **Owner:** @uwarring82 — **Risk:** Medium<br>
-  **Next milestone:** Expand null-hypothesis regression coverage; wire ROC/AUC harness into CI Guardian gate<br>
-  **Notes:** `guardian_background_validator.py` aggregates inventory, null-95, and SNR≥10 checks.
-
-```mermaid
-graph TD
-    physics_engine[Physics Engine]
-    background_effects[Background Effects]
-    collision_injection[Collision Injection]
-    validation_fw[Validation Framework]
-    physics_engine --> background_effects
-    physics_engine --> collision_injection
-    background_effects --> collision_injection
-    physics_engine --> validation_fw
-```
-
-Guardian Requirements (merge gates)
-• Physics deviation target: < 0.1% (tracked tests)
-• Tier-1..3 backgrounds modeled with tests & bounds
-• Ground-truth preservation in I/O and APIs
-• ROC AUC > 0.95 at 10:1 SNR (sim suites)
-• PRs → CI Guardian Validation must pass
-
-See STATUS.md for details and history.
-
-Run `python scripts/guardian-cli.py --summary-json` for a local snapshot; add
-`--strict` when pending checks should block merges instead of surfacing as
-warnings.
-
-🤝 Contributing
-
-Start with CONTRIBUTING.md. Choose your path:
-•Simulation (physics fidelity, performance)
-•Validation (tests, ROC/Null suites, Guardian)
-•Documentation (effect catalog, tutorials)
-
-📚 Learn More
-•/docs/architecture_overview.md
-•/docs/systematic_effects.md
-•/docs/guardian_framework.md
-•Project docs site (when enabled): see badge/link in STATUS.md
-
-Repository Principle:
-Every unvalidated systematic effect is a potential false discovery waiting to happen.
