@@ -18,4 +18,4 @@
 - [ ] I/O preserves ground-truth metadata
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.

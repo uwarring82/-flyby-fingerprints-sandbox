@@ -17,12 +17,15 @@
 | 2 | [Status Dashboard](Status_Dashboard) | Human-readable summary → live STATUS.md |
 | Quick utility | [Reporting Format](../blob/main/REPORTING.md) | Guardian-compliant progress/run notes |
 
-## Quick Links
-- [Tracks landing](Project_Overview#tracks)
-- [Theory entry folder](../tree/main/theory/)
-- [Numerics entry folder](../tree/main/numerics/)
-- [Experiments entry folder](../tree/main/experiments/)
-- [Docs portal (MkDocs)](../tree/main/docs/) — `mkdocs.yml` defines the manuals site scaffold.
+> **Quick Links**
+> - [Theory folder](../tree/main/theory/)
+> - [Numerics folder](../tree/main/numerics/)
+> - [Experiments folder](../tree/main/experiments/)
+> - [STATUS.md](../blob/main/STATUS.md)
+> - [REPORTING.md](../blob/main/REPORTING.md)
+> - [Theory Track (wiki)](Tracks/Theory_Track)
+> - [Numerics Track (wiki)](Tracks/Numerics_Track)
+> - [Experiments Track (wiki)](Tracks/Experiments_Track)
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.

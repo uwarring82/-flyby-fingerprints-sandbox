@@ -31,4 +31,4 @@ This wiki orients contributors; manuals and specs live in the repo.
 | Reporting cadence | [`REPORTING.md`](../blob/main/REPORTING.md) |
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.

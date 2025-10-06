@@ -1,11 +1,11 @@
 # Theory Track
 
+> Source in repo → [theory/](../../tree/main/theory/) · [_glossary.md](../../blob/main/theory/_glossary.md)
+
 ## Purpose & Outputs
 - [ ] Define Pillar specifications (P1–P9) with acceptance checklists.
 - [ ] Publish validation snippets to unblock Numerics and Experiments.
 - [ ] Steward the shared symbol glossary and interface definitions.
-- Entry folder: [`theory/`](../../tree/main/theory/)
-
 ## Active Focus — P1 Single-Ion Dynamics
 | Item | Pointer |
 | --- | --- |
@@ -24,4 +24,4 @@
 - [ ] Validation snippets comparing trap frequencies vs. analytics committed.
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.
