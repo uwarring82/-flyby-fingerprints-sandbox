@@ -1,11 +1,11 @@
 # Numerics Track
 
+> Source in repo → [numerics/](../../tree/main/numerics/) · [Guardian CI workflow](../../blob/main/.github/workflows/guardian-validation.yml) · [guardian-cli.py](../../blob/main/scripts/guardian-cli.py)
+
 ## Purpose & Outputs
 - [ ] Build molecular dynamics & symplectic integrators aligned with Theory interfaces.
 - [ ] Implement Monte Carlo collision kernels and convergence harnesses.
 - [ ] Maintain CI hooks for Guardian validation.
-- Entry folder: [`numerics/`](../../tree/main/numerics/)
-
 ## Interfaces Consumed from Theory
 | Interface | Status | Source |
 | --- | --- | --- |
@@ -19,4 +19,4 @@
 - [ ] Guardian ROC suites activated once thresholds lock — see [Guardian Workflows](../Guardian_Workflows).
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.

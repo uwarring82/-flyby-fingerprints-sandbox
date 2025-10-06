@@ -1,5 +1,7 @@
 # Fly-by Fingerprints Sandbox
 
+[Wiki Home](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki) · [Theory Track](/theory) · [Numerics Track](/numerics) · [Experiments Track](/experiments) · [Status](./STATUS.md)
+
 Ion–neutral collision signatures in trapped-ion systems: a sandbox to develop the theory, numerics, and experimental playbooks needed to detect and interpret fly-by events.
 
 > **Working mode:** Three tracks run in parallel — **Theory (priority 1)**, **Numerics (priority 2)**, **Experiments (priority 3)** — with agile, rolling decisions.
@@ -75,6 +77,12 @@ pip install -r requirements.txt  # if present
 - Parallel tracks with rolling gates; Phase-2 (numerics) may start once Theory drafts provide safe-to-consume interfaces.
 - Minimal viable drafts first; refine iteratively.
 - Validation first: every new model or kernel ships with a tiny, runnable check.
+
+---
+
+## Documentation & Guides
+
+- **Start in the Wiki:** [Wiki Home](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki) · [Guardian Workflows](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki/Guardian_Workflows) · [Theory Track](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki/Theory_Track) · [Numerics Track](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki/Numerics_Track) · [Experiments Track](https://github.com/uwarring82/-flyby-fingerprints-sandbox/wiki/Experiments_Track)
 
 ---
 

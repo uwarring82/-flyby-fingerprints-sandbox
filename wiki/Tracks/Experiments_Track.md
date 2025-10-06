@@ -1,11 +1,11 @@
 # Experiments Track
 
+> Source in repo → [experiments/](../../tree/main/experiments/) · [templates/](../../tree/main/experiments/templates/)
+
 ## Purpose & Outputs
 - [ ] Encode procedures, calibration steps, and acquisition templates aligned with Guardian requirements.
 - [ ] Characterize backgrounds before discovery claims.
 - [ ] Provide lab-ready notebooks and data hooks for validation imports.
-- Entry folder: [`experiments/`](../../tree/main/experiments/)
-
 ## Operating Stance
 - Background-first: experiments currently support characterization and validation, **not** new discovery campaigns.
 - Consume stable models from [Theory Track](Theory_Track) and numerical harnesses from [Numerics Track](Numerics_Track).
@@ -17,4 +17,4 @@
 |  |  |  |  |  |  |
 
 ---
-Last synchronized with main on 2025-10-06 (commit fe72749). Owner: CODEX.
+Last synchronized with main on 2025-10-06 (commit 7fb7095). Owner: CODEX.
